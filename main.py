@@ -59,10 +59,13 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     
     # Set the `kernel_size` and `stride`.
     def conv_1x1(x, filters, kernel_size=1, stride=1):
-        return tf.layers.conv2d(x, filters, kernel_size, stride)
+        return tf.layers.conv2d(x, filters, kernel_size, stride, 
+         kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+
         
     def upsample(x, kernel_size, strides, filters=2, padding='same'):
-        return tf.layers.conv2d_transpose(x, filters, kernel_size, strides, padding)
+        return tf.layers.conv2d_transpose(x, filters, kernel_size, strides, padding, 
+         kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
     # Conv 1x1
     vgg_layer7 = conv_1x1(vgg_layer7_out, num_classes)
@@ -145,7 +148,7 @@ def run():
 
     # Hyperparameters
     learning_rate = tf.constant(0.0001)
-    epochs = 50
+    epochs = 200
     batch_size = 10
 
     # Download pretrained vgg model
